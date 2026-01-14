@@ -13,3 +13,5 @@ select * from sam;
 
 select near_school,count(*) from sam group by near_school; 
 
+
+SELECT * FROM sam LIMIT 5;
