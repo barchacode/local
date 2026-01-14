@@ -17,7 +17,7 @@ def clean_data(input_file, output_file):
     df.to_csv(output_file, index=False)
 
 if __name__ == "__main__":
-    input_path = BASE_DIR / "data" / "sample.csv"
-    output_path = BASE_DIR / "data" / "cleaned_sample.csv"
+    input_path = BASE_DIR / "data" / "house_price.csv"
+    output_path = BASE_DIR / "data" / "cleaned.csv"
 
     clean_data(input_path, output_path)
