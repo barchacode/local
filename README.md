@@ -1,12 +1,2 @@
-# Weather ETL Pipeline
-
-This project demonstrates a basic ETL pipeline:
-- Extracts weather data from Open-Meteo API
-- Transforms hourly weather data
-- Loads cleaned data into PostgreSQL
-
-Tech Stack:
-- Python
-- Pandas
-- PostgreSQL
-- Git
+## Automation
+This pipeline is designed to be scheduler-ready and can be automated using cron or Apache Airflow in production environments.

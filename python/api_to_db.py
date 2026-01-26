@@ -3,24 +3,49 @@ import requests
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import logging
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 def run_pipeline():
- load_dotenv()
- base_dir = Path(__file__).resolve().parent.parent
- url="https://api.open-meteo.com/v1/forecast?latitude=33.6844&longitude=73.0479&hourly=temperature_2m"
- response = requests.get(url)
- data = response.json()
+    try:
+        logging.info("Pipeline started")
 
- df = pd.DataFrame(data["hourly"])  
+        load_dotenv()
+        base_dir = Path(__file__).resolve().parent.parent
 
- df["time"] = pd.to_datetime(df["time"])
- df["date"] = df["time"].dt.date
- df["hour"] = df["time"].dt.hour
+        url = "https://api.open-meteo.com/v1/forecast?latitude=33.6844&longitude=73.0479&hourly=temperature_2m"
+        response = requests.get(url)
+        response.raise_for_status()   # VERY IMPORTANT
+        data = response.json()
 
- df = df[["time", "date", "hour", "temperature_2m"]]
- df = df.rename(columns={"temperature_2m": "temperature"})
+        logging.info("Data extracted from API")
 
- output_path = base_dir / "data" / "weather_cleaned.csv"
- df.to_csv(output_path, index=False)
+        df = pd.DataFrame(data["hourly"])
+
+        df["time"] = pd.to_datetime(df["time"])
+        df["date"] = df["time"].dt.date
+        df["hour"] = df["time"].dt.hour
+
+        df = df[["time", "date", "hour", "temperature_2m"]]
+        df = df.rename(columns={"temperature_2m": "temperature"})
+
+        output_path = base_dir / "data" / "weather_cleaned.csv"
+        df.to_csv(output_path, index=False)
+
+        logging.info("Data transformed and saved")
+        logging.info("Pipeline finished successfully")
+
+    except Exception as e:
+        logging.error(f"Pipeline failed: {e}")
+        raise
+
+ 
+ 
 if __name__ == "__main__":
     run_pipeline()
  
